@@ -1,0 +1,46 @@
+{% extends '../base.html' %}
+
+{% block title %}
+<title>{{ author.name }}</title>
+{% endblock %}
+
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/posts_show.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-content gray lighten-3">
+            <span class="right">Member since: {{ author.date_joined.date }}</span>
+            <h4>{{ author.name }}</h4>
+            <p>Email: <a href="mailto:{{ author.email }}">{{ author.email }}</a></p>
+            <blockquote>
+                <p>{{ author.about }}</p>
+            </blockquote>
+        </div>
+    </div>
+    <ul class="collection with-header">
+        <li class="collection-header blue lighten-3">
+            <h6>Posts by {{ author.name }}</h6>
+        </li>
+        {% if posts %}
+            {% for post in posts %}
+                <li class="collection-item">
+                    <a href="{% url 'myblog:posts_show' post.id %}">
+                    <div class="card-content">
+                        <span class="right grey-text">Last updated: {{ post.date_updated }}</span>
+                        <h6 class="black-text">{{ post.post_title }}</h6>
+                        <p class="black-text">{{ post.post_content | truncatewords:10 }}</p>
+                    </div>
+                </a>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li class="collection-item">This author has not created any posts yet.</li>
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}
